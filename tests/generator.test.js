@@ -242,9 +242,8 @@ describe('Mock Generation', () => {
         const mockPath = path.join(outputDirectory, 'ContractMock5.sol');
         const content = fs.readFileSync(mockPath, 'utf8');
 
-        // Check event definition and emit function with proper type names
+        // Check event definition with proper type names
         expect(content).toContain('event OrderSubmitted(Order order)');
-        expect(content).toContain('function emitOrderSubmitted(Order memory order)');
         expect(content).toContain('struct Order {');
         expect(content).toContain('uint256 id;');
         expect(content).toContain('address trader;');
@@ -324,12 +323,6 @@ describe('Mock Generation', () => {
         expect(content).toContain('delete _getMultiArrayReturn_0');
         expect(content).toContain('for(uint i = 0; i < 2; i++)');
         expect(content).toContain('_getMultiArrayReturn_0[i][j] = _value0[i][j]');
-        
-        // Check both getter functions
-        expect(content).toContain('function getMultiArray()');
-        expect(content).toContain('returns (Order[][2] memory)');
-        expect(content).toContain('function getGetMultiArrayReturnValue0Element(uint i0, uint i1)');
-        expect(content).toContain('return _getMultiArrayReturn_0[i0][i1]');
 
         // Add more specific checks for storage and setter
         expect(content).toContain('Order[][2] private _getMultiArrayReturn_0');

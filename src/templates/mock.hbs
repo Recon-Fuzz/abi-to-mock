@@ -16,47 +16,8 @@ contract {{contractName}} {
     {{/each}}
 
     /*****************************************************************************
-    * VIEW FUNCTIONS
+    * SETTER FUNCTIONS
     ****************************************************************************/
-    {{#each functions}}
-    {{#if outputs}}
-    // Mock implementation of {{name}}
-    function {{name}}({{#each inputs}}{{processType this}}{{#if (isStruct (processType this))}} memory{{/if}} {{#if name}}{{name}}{{else}}arg{{@index}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}}) public view returns ({{#each outputs}}{{processType this}}{{#if (isStruct (processType this))}} memory{{/if}}{{#unless @last}}, {{/unless}}{{/each}}) {
-        {{#if (hasMultipleOutputs outputs)}}
-        return ({{#each outputs}}_{{../name}}Return_{{@index}}{{#unless @last}}, {{/unless}}{{/each}});
-        {{else}}
-        return _{{name}}Return_0;
-        {{/if}}
-    }
-
-    {{/if}}
-    {{/each}}
-    
-    /*****************************************************************************
-    * STRUCT DEFINITIONS
-    ****************************************************************************/
-    {{#each structs}}
-    // Struct definition for {{name}}
-    struct {{name}} {
-        {{#each fields}}
-        {{type}} {{name}};
-        {{/each}}
-    }
-
-    {{/each}}
-
-    /*****************************************************************************
-    * INTERNAL STORAGE
-    ****************************************************************************/
-    {{#each functions}}
-    {{#each outputs}}
-    {{processType this}} private _{{../name}}Return_{{@index}};
-    {{/each}}
-    {{/each}}
-
-    /*****************************************************************************
-     * SETTER FUNCTIONS
-     ****************************************************************************/
     {{#each functions}}
     {{#if outputs}}
     // Function to set return values for {{name}}
@@ -100,35 +61,50 @@ contract {{contractName}} {
     {{/each}}
 
     /*****************************************************************************
-     * EVENT EMITTER FUNCTIONS
-     ****************************************************************************/
-    {{#each events}}
-    // Event declaration
-    event {{name}}({{#each inputs}}{{processType this}} {{#if name}}{{name}}{{else}}arg{{@index}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}});
-
-    // Function to emit {{name}} event
-    function emit{{name}}({{#each inputs}}{{processType this}}{{memoryKeyword (processType this)}} {{#if name}}{{name}}{{else}}arg{{@index}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}}) public {
-        emit {{name}}({{#each inputs}}{{#if name}}{{name}}{{else}}arg{{@index}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}});
+    * STRUCT DEFINITIONS
+    ****************************************************************************/
+    {{#each structs}}
+    // Struct definition for {{name}}
+    struct {{name}} {
+        {{#each fields}}
+        {{type}} {{name}};
+        {{/each}}
     }
 
     {{/each}}
 
     /*****************************************************************************
-    * STORAGE GETTERS
+    * EVENTS DEFINITIONS
+    ****************************************************************************/
+    {{#each events}}
+    // Event declaration
+    event {{name}}({{#each inputs}}{{processType this}} {{#if name}}{{name}}{{else}}arg{{@index}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}});
+
+    {{/each}}
+
+    /*****************************************************************************
+    * INTERNAL STORAGE
     ****************************************************************************/
     {{#each functions}}
     {{#each outputs}}
-    // Storage getter for {{../name}} return value {{@index}}
-    function get{{capitalize ../name}}ReturnValue{{@index}}() public view returns ({{processType this}}{{memoryKeyword (processType this)}}) {
-        return _{{../name}}Return_{{@index}};
+    {{processType this}} private _{{../name}}Return_{{@index}};
+    {{/each}}
+    {{/each}}
+
+    /*****************************************************************************
+    * VIEW FUNCTIONS
+    ****************************************************************************/
+    {{#each functions}}
+    {{#if outputs}}
+    // Mock implementation of {{name}}
+    function {{name}}({{#each inputs}}{{processType this}}{{#if (isStruct (processType this))}} memory{{/if}} {{#if name}}{{name}}{{else}}arg{{@index}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}}) public view returns ({{#each outputs}}{{processType this}}{{#if (isStruct (processType this))}} memory{{/if}}{{#unless @last}}, {{/unless}}{{/each}}) {
+        {{#if (hasMultipleOutputs outputs)}}
+        return ({{#each outputs}}_{{../name}}Return_{{@index}}{{#unless @last}}, {{/unless}}{{/each}});
+        {{else}}
+        return _{{name}}Return_0;
+        {{/if}}
     }
 
-    {{#if (isArrayType (processType this))}}
-    // Array element getter for {{../name}} return value {{@index}}
-    function get{{capitalize ../name}}ReturnValue{{@index}}Element({{getDimIndices (processType this)}}) public view returns ({{getElementType (processType this)}}{{#if (isStructElementType (processType this))}} memory{{/if}}) {
-        return _{{../name}}Return_{{@index}}{{getArrayAccessors (processType this)}};
-    }
     {{/if}}
-    {{/each}}
     {{/each}}
 }
