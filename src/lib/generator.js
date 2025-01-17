@@ -130,12 +130,14 @@ Handlebars.registerHelper('getArrayAccessors', function(type) {
 Handlebars.registerHelper('memoryKeyword', (type) => {
     // Check for array dimensions (both fixed and dynamic)
     const hasArrayDimension = /(\[\d*\])+$/.test(type);
+    // Check if it's a fixed-size bytes type (bytes1 through bytes32)
+    const isFixedBytes = /^bytes(?:[1-9]|[12]\d|3[0-2])$/.test(type);
     // Check if type contains common reference types
     const isReferenceType = type.includes('string') || 
                            hasArrayDimension || 
-                           type.includes('bytes') || 
+                           (type === 'bytes') || // only dynamic bytes gets memory
                            !type.match(/^(address|bool|u?int\d*|bytes\d+)$/);
-    return isReferenceType ? ' memory' : '';
+    return (isReferenceType && !isFixedBytes) ? ' memory' : '';
 });
 
 // Update isStruct helper (can be removed as it's now handled by memoryKeyword)
