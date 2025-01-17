@@ -1,7 +1,40 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.0;
 
 contract {{contractName}} {
+    /*****************************************************************************
+     * NON-VIEW FUNCTIONS
+     ****************************************************************************/
+    {{#each functions}}
+    {{#unless outputs}}
+    // Mock implementation of {{name}}
+    function {{name}}({{#each inputs}}{{processType this}}{{#if (isStruct (processType this))}} memory{{/if}} {{#if name}}{{name}}{{else}}arg{{@index}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}}) public {
+        
+    }
+
+    {{/unless}}
+    {{/each}}
+
+    /*****************************************************************************
+    * VIEW FUNCTIONS
+    ****************************************************************************/
+    {{#each functions}}
+    {{#if outputs}}
+    // Mock implementation of {{name}}
+    function {{name}}({{#each inputs}}{{processType this}}{{#if (isStruct (processType this))}} memory{{/if}} {{#if name}}{{name}}{{else}}arg{{@index}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}}) public view returns ({{#each outputs}}{{processType this}}{{#if (isStruct (processType this))}} memory{{/if}}{{#unless @last}}, {{/unless}}{{/each}}) {
+        {{#if (hasMultipleOutputs outputs)}}
+        return ({{#each outputs}}_{{../name}}Return_{{@index}}{{#unless @last}}, {{/unless}}{{/each}});
+        {{else}}
+        return _{{name}}Return_0;
+        {{/if}}
+    }
+
+    {{/if}}
+    {{/each}}
+    
+    /*****************************************************************************
+    * STRUCT DEFINITIONS
+    ****************************************************************************/
     {{#each structs}}
     // Struct definition for {{name}}
     struct {{name}} {
@@ -9,14 +42,23 @@ contract {{contractName}} {
         {{type}} {{name}};
         {{/each}}
     }
+
     {{/each}}
 
+    /*****************************************************************************
+    * INTERNAL STORAGE
+    ****************************************************************************/
     {{#each functions}}
-    // Storage for {{name}} return values
     {{#each outputs}}
     {{processType this}} private _{{../name}}Return_{{@index}};
     {{/each}}
+    {{/each}}
 
+    /*****************************************************************************
+     * SETTER FUNCTIONS
+     ****************************************************************************/
+    {{#each functions}}
+    {{#if outputs}}
     // Function to set return values for {{name}}
     function set{{capitalize name}}Return({{#each outputs}}{{processType this}}{{memoryKeyword (processType this)}} _value{{@index}}{{#unless @last}}, {{/unless}}{{/each}}) public {
         {{#each outputs}}
@@ -54,38 +96,12 @@ contract {{contractName}} {
         {{/each}}
     }
 
-    // Mock implementation of {{name}}
-    function {{name}}({{#each inputs}}{{processType this}}{{#if (isStruct (processType this))}} memory{{/if}} {{#if name}}{{name}}{{else}}arg{{@index}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}})
-        public
-        {{#if outputs}}returns ({{#each outputs}}{{processType this}}{{#if (isStruct (processType this))}} memory{{/if}}{{#unless @last}}, {{/unless}}{{/each}}){{/if}}
-    {
-        {{#if outputs}}
-        {{#if (hasMultipleOutputs outputs)}}
-        return ({{#each outputs}}_{{../name}}Return_{{@index}}{{#unless @last}}, {{/unless}}{{/each}});
-        {{else}}
-        return _{{name}}Return_0;
-        {{/if}}
-        {{/if}}
-    }
-
-    {{#each outputs}}
-    {{#if (isArrayType (processType this))}}
-    // Individual element getter for {{../name}}
-    function {{../name}}Element(uint i{{#if (isMultiArray (processType this))}}, uint j{{/if}})
-        public
-        returns ({{getElementType (processType this)}}{{#if (isStructElementType (processType this))}} memory{{/if}})
-    {
-        {{#if (isMultiArray (processType this))}}
-        return _{{../name}}Return_{{@index}}[i][j];
-        {{else}}
-        return _{{../name}}Return_{{@index}}[i];
-        {{/if}}
-    }
     {{/if}}
     {{/each}}
 
-    {{/each}}
-
+    /*****************************************************************************
+     * EVENT EMITTER FUNCTIONS
+     ****************************************************************************/
     {{#each events}}
     // Event declaration
     event {{name}}({{#each inputs}}{{processType this}} {{#if name}}{{name}}{{else}}arg{{@index}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}});
@@ -94,5 +110,26 @@ contract {{contractName}} {
     function emit{{name}}({{#each inputs}}{{processType this}}{{memoryKeyword (processType this)}} {{#if name}}{{name}}{{else}}arg{{@index}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}}) public {
         emit {{name}}({{#each inputs}}{{#if name}}{{name}}{{else}}arg{{@index}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}});
     }
+
+    {{/each}}
+
+    /*****************************************************************************
+    * STORAGE GETTERS
+    ****************************************************************************/
+    {{#each functions}}
+    {{#each outputs}}
+    // Storage getter for {{../name}} return value {{@index}}
+    function get{{capitalize ../name}}ReturnValue{{@index}}() public view returns ({{processType this}}{{memoryKeyword (processType this)}}) {
+        return _{{../name}}Return_{{@index}};
+    }
+
+    {{#if (isArrayType (processType this))}}
+    // Array element getter for {{../name}} return value {{@index}}
+    function get{{capitalize ../name}}ReturnValue{{@index}}Element({{#getDimIndices (processType this)}}uint i{{@index}}{{#unless @last}}, {{/unless}}{{/getDimIndices}}) public view returns ({{getElementType (processType this)}}{{#if (isStructElementType (processType this))}} memory{{/if}}) {
+        return _{{../name}}Return_{{@index}}{{#getDimIndices (processType this)}}[i{{@index}}]{{/getDimIndices}};
+    }
+
+    {{/if}}
+    {{/each}}
     {{/each}}
 }

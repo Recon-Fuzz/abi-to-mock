@@ -115,6 +115,12 @@ Handlebars.registerHelper('getFixedArrayLength', function(type) {
     return match ? match[1] : '0';
 });
 
+// Add helper to get array dimensions
+Handlebars.registerHelper('getDimIndices', function(type) {
+    const matches = type.match(/\[\d*\]/g) || [];
+    return matches.map((_, index) => ({ index }));
+});
+
 // Update memoryKeyword helper to handle all reference types
 Handlebars.registerHelper('memoryKeyword', (type) => {
     // Check for array dimensions (both fixed and dynamic)
