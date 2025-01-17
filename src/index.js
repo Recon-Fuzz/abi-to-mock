@@ -12,7 +12,7 @@ function AbiToMock(abiPath, outputDirectory = './out', contractName = 'Contract'
         if (!relativePath.startsWith('.')) {
             relativePath = `./${relativePath}`;
         }
-        console.log(`Mock generated at ${relativePath}/${contractName}Mock.sol`);
+        console.log(`Mock generated at ${relativePath}/${contractName}.sol`);
         
         return mock;
     } catch (error) {

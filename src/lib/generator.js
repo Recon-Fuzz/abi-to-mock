@@ -115,10 +115,15 @@ Handlebars.registerHelper('getFixedArrayLength', function(type) {
     return match ? match[1] : '0';
 });
 
-// Add helper to get array dimensions
+// Update helper to get array dimensions with proper formatting
 Handlebars.registerHelper('getDimIndices', function(type) {
-    const matches = type.match(/\[\d*\]/g) || [];
-    return matches.map((_, index) => ({ index }));
+    const dimensions = type.match(/\[\d*\]/g) || [];
+    return dimensions.map((_, index) => `uint i${index}`).join(', ');
+});
+
+Handlebars.registerHelper('getArrayAccessors', function(type) {
+    const dimensions = type.match(/\[\d*\]/g) || [];
+    return dimensions.map((_, index) => `[i${index}]`).join('');
 });
 
 // Update memoryKeyword helper to handle all reference types

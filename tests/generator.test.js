@@ -7,7 +7,7 @@ const path = require('path');
 
 describe('Mock Generation', () => {
     let outputDirectory;
-    
+
     beforeEach(() => {
         // Use relative path from CWD
         outputDirectory = './test-output';
@@ -26,7 +26,7 @@ describe('Mock Generation', () => {
     });
 
     test('should generate mock for valid ABI', () => {
-        const abi = {/* mock ABI object */};
+        const abi = {/* mock ABI object */ };
         const mock = generateMock(abi, outputDirectory);
         expect(mock).toBeDefined();
         // Add more assertions based on expected mock structure
@@ -81,10 +81,10 @@ describe('Mock Generation', () => {
             }
         ];
         generateMock(abi, outputDirectory, "ContractMock1");
-        
+
         const mockPath = path.join(outputDirectory, 'ContractMock1.sol');
         expect(fs.existsSync(mockPath)).toBe(true);
-        
+
         const content = fs.readFileSync(mockPath, 'utf8');
         expect(content).toContain('contract ContractMock');
         expect(content).toContain('function transfer(address recipient, uint256 amount)');
@@ -98,8 +98,8 @@ describe('Mock Generation', () => {
                 "inputs": [
                     {
                         "components": [
-                            {"name": "id", "type": "uint256", "internalType": "uint256"},
-                            {"name": "trader", "type": "address", "internalType": "address"}
+                            { "name": "id", "type": "uint256", "internalType": "uint256" },
+                            { "name": "trader", "type": "address", "internalType": "address" }
                         ],
                         "internalType": "struct Order",
                         "name": "order",
@@ -118,17 +118,17 @@ describe('Mock Generation', () => {
                 "type": "function"
             }
         ];
-        
-        generateMock(abi, outputDirectory,'ContractMock2');
-        
+
+        generateMock(abi, outputDirectory, 'ContractMock2');
+
         const mockPath = path.join(outputDirectory, 'ContractMock2.sol');
         const content = fs.readFileSync(mockPath, 'utf8');
-        
+
         // Check struct definition with internal type name
         expect(content).toContain('struct Order {');
         expect(content).toContain('uint256 id;');
         expect(content).toContain('address trader;');
-        
+
         // Check function signature with internal type name
         expect(content).toContain('function submitOrder(Order memory order)');
     });
@@ -143,8 +143,8 @@ describe('Mock Generation', () => {
                 "outputs": [
                     {
                         "components": [
-                            {"name": "id", "type": "uint256", "internalType": "uint256"},
-                            {"name": "trader", "type": "address", "internalType": "address"}
+                            { "name": "id", "type": "uint256", "internalType": "uint256" },
+                            { "name": "trader", "type": "address", "internalType": "address" }
                         ],
                         "internalType": "struct Order[]",
                         "name": "",
@@ -155,12 +155,12 @@ describe('Mock Generation', () => {
                 "type": "function"
             }
         ];
-        
+
         generateMock(abi, outputDirectory, 'ContractMock3');
-        
+
         const mockPath = path.join(outputDirectory, 'ContractMock3.sol');
         const content = fs.readFileSync(mockPath, 'utf8');
-        
+
         // Check array return type
         expect(content).toContain('Order[] private _getOrdersReturn_0');
         expect(content).toContain('function setGetOrdersReturn(Order[] memory _value0)');
@@ -176,9 +176,9 @@ describe('Mock Generation', () => {
                 "outputs": [
                     {
                         "components": [
-                            {"name": "name", "type": "string", "internalType": "string"},
-                            {"name": "active", "type": "bool", "internalType": "bool"},
-                            {"name": "balance", "type": "uint256", "internalType": "uint256"},
+                            { "name": "name", "type": "string", "internalType": "string" },
+                            { "name": "active", "type": "bool", "internalType": "bool" },
+                            { "name": "balance", "type": "uint256", "internalType": "uint256" },
                             {
                                 "name": "roles",
                                 "type": "uint8[]",
@@ -195,20 +195,20 @@ describe('Mock Generation', () => {
                 "type": "function"
             }
         ];
-        
-        
+
+
         generateMock(abi, outputDirectory, 'ContractMock4');
-        
+
         const mockPath = path.join(outputDirectory, 'ContractMock4.sol');
         const content = fs.readFileSync(mockPath, 'utf8');
-        
+
         // Check struct with array field using internalType name
         expect(content).toContain('struct UserProfile {');
         expect(content).toContain('string name;');
         expect(content).toContain('bool active;');
         expect(content).toContain('uint256 balance;');
         expect(content).toContain('uint8[] roles;');
-        
+
         // Check getter/setter with correct type name
         expect(content).toContain('UserProfile private _getUserProfileReturn_0');
         expect(content).toContain('function setGetUserProfileReturn(UserProfile memory _value0)');
@@ -221,10 +221,10 @@ describe('Mock Generation', () => {
                 "inputs": [
                     {
                         "components": [
-                            {"name": "id", "type": "uint256", "internalType": "uint256"},
-                            {"name": "trader", "type": "address", "internalType": "address"},
-                            {"name": "status", "type": "uint8", "internalType": "enum OrderStatus"},
-                            {"name": "orderType", "type": "uint8", "internalType": "enum OrderType"}
+                            { "name": "id", "type": "uint256", "internalType": "uint256" },
+                            { "name": "trader", "type": "address", "internalType": "address" },
+                            { "name": "status", "type": "uint8", "internalType": "enum OrderStatus" },
+                            { "name": "orderType", "type": "uint8", "internalType": "enum OrderType" }
                         ],
                         "internalType": "struct Order",
                         "name": "order",
@@ -235,13 +235,13 @@ describe('Mock Generation', () => {
                 "type": "event"
             }
         ];
-        
-        
+
+
         generateMock(abi, outputDirectory, 'ContractMock5');
-        
+
         const mockPath = path.join(outputDirectory, 'ContractMock5.sol');
         const content = fs.readFileSync(mockPath, 'utf8');
-        
+
         // Check event definition and emit function with proper type names
         expect(content).toContain('event OrderSubmitted(Order order)');
         expect(content).toContain('function emitOrderSubmitted(Order memory order)');
@@ -259,8 +259,8 @@ describe('Mock Generation', () => {
                     { "name": "addresses", "type": "address[2][]", "internalType": "address[2][]" },
                     {
                         "components": [
-                            {"name": "id", "type": "uint256"},
-                            {"name": "trader", "type": "address"}
+                            { "name": "id", "type": "uint256" },
+                            { "name": "trader", "type": "address" }
                         ],
                         "internalType": "struct Order[][2]",
                         "name": "orders",
@@ -274,13 +274,13 @@ describe('Mock Generation', () => {
                 "type": "function"
             }
         ];
-        
-        
+
+
         generateMock(abi, outputDirectory, 'ContractMock6');
-        
+
         const mockPath = path.join(outputDirectory, 'ContractMock6.sol');
         const content = fs.readFileSync(mockPath, 'utf8');
-        
+
         expect(content).toContain('struct Order {');
         expect(content).toContain('function processOrders(address[2][] memory addresses, Order[][2] memory orders, uint256[2] memory numbers)');
     });
@@ -293,8 +293,8 @@ describe('Mock Generation', () => {
                 "outputs": [
                     {
                         "components": [
-                            {"name": "id", "type": "uint256"},
-                            {"name": "trader", "type": "address"}
+                            { "name": "id", "type": "uint256" },
+                            { "name": "trader", "type": "address" }
                         ],
                         "internalType": "struct Order[][2]",
                         "name": "",
@@ -328,8 +328,12 @@ describe('Mock Generation', () => {
         // Check both getter functions
         expect(content).toContain('function getMultiArray()');
         expect(content).toContain('returns (Order[][2] memory)');
-        expect(content).toContain('function getMultiArrayElement(uint i, uint j)');
-        expect(content).toContain('returns (Order memory)');
+        expect(content).toContain('function getGetMultiArrayReturnValue0Element(uint i0, uint i1)');
+        expect(content).toContain('return _getMultiArrayReturn_0[i0][i1]');
+
+        // Add more specific checks for storage and setter
+        expect(content).toContain('Order[][2] private _getMultiArrayReturn_0');
+        expect(content).toContain('function setGetMultiArrayReturn(Order[][2] memory _value0)');
     });
 
     test('should handle nested structs', () => {
@@ -340,13 +344,13 @@ describe('Mock Generation', () => {
                         "components": [
                             {
                                 "components": [
-                                    {"name": "value", "type": "uint256"}
+                                    { "name": "value", "type": "uint256" }
                                 ],
                                 "internalType": "struct A",
                                 "name": "x",
                                 "type": "tuple"
                             },
-                            {"name": "c", "type": "uint256"}
+                            { "name": "c", "type": "uint256" }
                         ],
                         "internalType": "struct B",
                         "name": "data",
@@ -359,19 +363,19 @@ describe('Mock Generation', () => {
                 "type": "function"
             }
         ];
-        
+
         generateMock(abi, outputDirectory, 'ContractMock7');
-        
+
         const mockPath = path.join(outputDirectory, 'ContractMock7.sol');
         const content = fs.readFileSync(mockPath, 'utf8');
-        
+
         // Check that both struct definitions exist
         expect(content).toContain('struct A {');
         expect(content).toContain('uint256 value;');
         expect(content).toContain('struct B {');
         expect(content).toContain('A x;');
         expect(content).toContain('uint256 c;');
-        
+
         // Check function signature
         expect(content).toContain('function processNestedStruct(B memory data)');
     });
@@ -384,19 +388,19 @@ describe('Mock Generation', () => {
                         "components": [
                             {
                                 "components": [
-                                    {"name": "value", "type": "uint256"},
-                                    {"name": "validated", "type": "bool"},
-                                    {"name": "tags", "type": "string[]"}
+                                    { "name": "value", "type": "uint256" },
+                                    { "name": "validated", "type": "bool" },
+                                    { "name": "tags", "type": "string[]" }
                                 ],
                                 "internalType": "struct ValidationInfo",
                                 "name": "validation",
                                 "type": "tuple"
                             },
-                            {"name": "timestamp", "type": "uint256"},
+                            { "name": "timestamp", "type": "uint256" },
                             {
                                 "components": [
-                                    {"name": "x", "type": "uint256"},
-                                    {"name": "y", "type": "uint256"}
+                                    { "name": "x", "type": "uint256" },
+                                    { "name": "y", "type": "uint256" }
                                 ],
                                 "internalType": "struct Point[]",
                                 "name": "coordinates",
@@ -414,18 +418,18 @@ describe('Mock Generation', () => {
                         "components": [
                             {
                                 "components": [
-                                    {"name": "id", "type": "uint256"},
-                                    {"name": "data", "type": "bytes"}
+                                    { "name": "id", "type": "uint256" },
+                                    { "name": "data", "type": "bytes" }
                                 ],
                                 "internalType": "struct ResultData[2]",
                                 "name": "results",
                                 "type": "tuple[2]"
                             },
-                            {"name": "success", "type": "bool"},
+                            { "name": "success", "type": "bool" },
                             {
                                 "components": [
-                                    {"name": "code", "type": "uint8"},
-                                    {"name": "message", "type": "string"}
+                                    { "name": "code", "type": "uint8" },
+                                    { "name": "message", "type": "string" }
                                 ],
                                 "internalType": "struct Status[]",
                                 "name": "statuses",
@@ -441,47 +445,47 @@ describe('Mock Generation', () => {
                 "type": "function"
             }
         ];
-        
+
         generateMock(abi, outputDirectory, 'ContractMock9');
-        
+
         const mockPath = path.join(outputDirectory, 'ContractMock9.sol');
         const content = fs.readFileSync(mockPath, 'utf8');
-        
+
         // Check all struct definitions exist
         expect(content).toContain('struct ValidationInfo {');
         expect(content).toContain('uint256 value;');
         expect(content).toContain('bool validated;');
         expect(content).toContain('string[] tags;');
-        
+
         expect(content).toContain('struct Point {');
         expect(content).toContain('uint256 x;');
         expect(content).toContain('uint256 y;');
-        
+
         expect(content).toContain('struct ComplexInput {');
         expect(content).toContain('ValidationInfo validation;');
         expect(content).toContain('uint256 timestamp;');
         expect(content).toContain('Point[] coordinates;');
-        
+
         expect(content).toContain('struct ResultData {');
         expect(content).toContain('uint256 id;');
         expect(content).toContain('bytes data;');
-        
+
         expect(content).toContain('struct Status {');
         expect(content).toContain('uint8 code;');
         expect(content).toContain('string message;');
-        
+
         expect(content).toContain('struct ComplexOutput {');
         expect(content).toContain('ResultData[2] results;');
         expect(content).toContain('bool success;');
         expect(content).toContain('Status[] statuses;');
-        
+
         // Check function signatures
         expect(content).toContain('function processComplexData(ComplexInput memory input)');
         expect(content).toContain('returns (ComplexOutput memory)');
-        
+
         // Check storage variable
         expect(content).toContain('ComplexOutput private _processComplexDataReturn_0');
-        
+
         // Check setter function
         expect(content).toContain('function setProcessComplexDataReturn(ComplexOutput memory _value0)');
     });

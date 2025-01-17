@@ -34,7 +34,7 @@ describe('CLI Tests', () => {
         const outputDir = './customOut';
         const contractName = 'Token';
         const output = execSync(`node src/cli.js ${fixtureAbiPath} --out ${outputDir} --name ${contractName}`).toString();
-        expect(output).toContain(`Mock generated at ${outputDir}/${contractName}Mock.sol`);
+        expect(output).toContain(`Mock generated at ${outputDir}/${contractName}.sol`);
     });
 
     it('should use default contract name if --name is not provided', () => {

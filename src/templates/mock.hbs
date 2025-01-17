@@ -75,7 +75,7 @@ contract {{contractName}} {
         for(uint i = 0; i < _value{{@index}}.length; i++) {
             _{{../name}}Return_{{@index}}.push();
             for(uint j = 0; j < _value{{@index}}[i].length; j++) {
-                _{{../name}}Return_{{@index}}[i].push(_value{{@index}}[i][j]);
+                _{{../name}}Return_{{@index}}[i][j] = _value{{@index}}[i][j];
             }
         }
         {{/if}}
@@ -125,10 +125,9 @@ contract {{contractName}} {
 
     {{#if (isArrayType (processType this))}}
     // Array element getter for {{../name}} return value {{@index}}
-    function get{{capitalize ../name}}ReturnValue{{@index}}Element({{#getDimIndices (processType this)}}uint i{{@index}}{{#unless @last}}, {{/unless}}{{/getDimIndices}}) public view returns ({{getElementType (processType this)}}{{#if (isStructElementType (processType this))}} memory{{/if}}) {
-        return _{{../name}}Return_{{@index}}{{#getDimIndices (processType this)}}[i{{@index}}]{{/getDimIndices}};
+    function get{{capitalize ../name}}ReturnValue{{@index}}Element({{getDimIndices (processType this)}}) public view returns ({{getElementType (processType this)}}{{#if (isStructElementType (processType this))}} memory{{/if}}) {
+        return _{{../name}}Return_{{@index}}{{getArrayAccessors (processType this)}};
     }
-
     {{/if}}
     {{/each}}
     {{/each}}
