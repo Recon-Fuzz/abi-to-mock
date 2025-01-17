@@ -1,0 +1,23 @@
+{
+  "name": "abi-to-mock",
+  "version": "1.0.0",
+  "description": "A library to generate mock data from ABI definitions.",
+  "main": "src/index.js",
+  "bin": {
+    "abi-to-mock": "src/cli.js"
+  },
+  "scripts": {
+    "test": "jest",
+    "build": "echo 'Build step not defined yet.'"
+  },
+  "dependencies": {
+    "yargs": "^17.7.2",
+    "handlebars": "^4.7.8"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "keywords": ["ABI", "mock", "yargs", "javascript"],
+  "author": "Your Name",
+  "license": "MIT"
+}
