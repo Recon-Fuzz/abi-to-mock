@@ -89,10 +89,6 @@ generateMockString(abi: ABI[], name: string): string
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## License
-
-MIT License - see the [LICENSE](LICENSE) file for details
-
 ## Support
 
 For support, issues, or feature requests, please file an issue in the GitHub repository.
