@@ -1,6 +1,6 @@
 {
   "name": "abi-to-mock",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Generate Solidity mock contracts from Ethereum ABIs",
   "main": "dist/index.js",
   "browser": "dist/browser.js",
