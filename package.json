@@ -3,7 +3,8 @@
   "version": "1.0.3",
   "description": "Generate Solidity mock contracts from Ethereum ABIs",
   "main": "dist/index.js",
-  "browser": "dist/browser/abi-to-mock.js",
+  "browser": "dist/browser.js",
+  "module": "dist/browser.js",
   "types": "dist/index.d.ts",
   "bin": {
     "abi-to-mock": "./dist/cli.wrapper.js"

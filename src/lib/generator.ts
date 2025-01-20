@@ -1,14 +1,11 @@
-const isBrowser = typeof process === 'undefined' || !process.versions || !process.versions.node;
+const isBrowser = typeof window !== 'undefined';
 
-// We only need path for Node.js environment
+// Only import Node.js modules in Node environment
 const path = !isBrowser ? require('path') : null;
 const fs = !isBrowser ? require('fs') : null;
 
 import * as Handlebars from 'handlebars';
 import mockTemplate from '../templates/mock';
-
-
-
 
 import {
   AbiInput,
@@ -18,7 +15,6 @@ import {
   MockData,
   MockContract
 } from '../types';
-
 
 // Helper functions for type processing
 function processType(param: AbiInput): string {
@@ -182,26 +178,25 @@ Handlebars.registerHelper('hasMultipleOutputs', function(outputs: AbiInput[]) {
   return outputs && outputs.length > 1;
 });
 
-
 export function generateMockString(
   abiInput: any[] | { abi: any[] },
   contractName: string = 'Contract'
 ): string {
-  const abi = Array.isArray(abiInput) ? abiInput : abiInput?.abi;
-  
-  if (!Array.isArray(abi) || abi.length === 0) {
-    return '';
-  }
-
-  const { functions, events } = processABI(abi);
-  const mockData: MockData = {
-    contractName,
-    structs: processStructs(abi),
-    functions,
-    events
-  };
-
   try {
+    const abi = Array.isArray(abiInput) ? abiInput : abiInput?.abi;
+  
+    if (!Array.isArray(abi) || abi.length === 0) {
+      return '';
+    }
+
+    const { functions, events } = processABI(abi);
+    const mockData: MockData = {
+      contractName,
+      structs: processStructs(abi),
+      functions,
+      events
+    };
+
     const template = Handlebars.compile(mockTemplate);
     return template(mockData);
   } catch (error) {
@@ -210,7 +205,6 @@ export function generateMockString(
   }
 }
 
-// Only include this function for Node.js environment
 export function generateMock(
   abiInput: any[] | { abi: any[] },
   outputDirectory: string,
@@ -219,6 +213,7 @@ export function generateMock(
   if (isBrowser) {
     throw new Error('generateMock is not supported in browser environment. Use generateMockString instead.');
   }
+
   const mockContent = generateMockString(abiInput, contractName);
   
   // File system operations
