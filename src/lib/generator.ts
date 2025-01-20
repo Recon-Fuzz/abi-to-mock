@@ -1,7 +1,13 @@
 const isBrowser = typeof window !== 'undefined';
 
-// Import browser or node versions
-import { fs, path } from '../polyfills/fs-browser';
+// Import Node.js modules conditionally
+const nodeModules = !isBrowser ? {
+  path: require('path'),
+  fs: require('fs')
+} : {
+  path: null as typeof import('path') | null,
+  fs: null as typeof import('fs') | null
+};
 
 import * as Handlebars from 'handlebars';
 import mockTemplate from '../templates/mock';
@@ -213,6 +219,11 @@ export function generateMock(
     throw new Error('generateMock is not supported in browser environment. Use generateMockString instead.');
   }
 
+  if (!nodeModules.path || !nodeModules.fs) {
+    throw new Error('Node.js modules not available');
+  }
+
+  const { path, fs } = nodeModules;
   const mockContent = generateMockString(abiInput, contractName);
   
   // File system operations

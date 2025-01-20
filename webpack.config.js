@@ -1,19 +1,23 @@
 const path = require('path');
 
 module.exports = {
+  target: 'web',
   entry: './src/browser.ts',
   output: {
-    filename: 'bundle.js',
+    filename: 'browser.js',
     path: path.resolve(__dirname, 'dist'),
-    library: 'AbiToMock',
-    libraryTarget: 'umd',
+    library: {
+      type: 'umd',
+      name: 'AbiToMock',
+    },
     globalObject: 'this'
   },
   resolve: {
     extensions: ['.ts', '.js'],
     fallback: {
-      "path": false,
-      "fs": false
+      fs: false,
+      path: false,
+      process: false
     }
   },
   module: {

@@ -1,21 +1,21 @@
 {
   "name": "abi-to-mock",
-  "version": "1.0.5",
+  "version": "1.0.4",
   "description": "Generate Solidity mock contracts from Ethereum ABIs",
   "main": "dist/index.js",
+  "browser": "dist/browser.js",
   "module": "dist/browser.js",
   "types": "dist/index.d.ts",
   "bin": {
     "abi-to-mock": "./dist/cli.wrapper.js"
   },
   "files": [
-    "dist",
-    "src/polyfills"
+    "dist"
   ],
   "scripts": {
     "build": "npm run build:node && npm run build:browser",
     "build:node": "tsc && npm run create-cli-wrapper",
-    "build:browser": "webpack --mode production",
+    "build:browser": "webpack --mode production --output-path dist",
     "pretest": "npm run build && mkdir -p test/transformers test/mocks",
     "test": "jest",
     "dev": "tsc -w",
@@ -63,11 +63,5 @@
     "name": "Knot",
     "email": "terabase7@gmail.com"
   },
-  "license": "MIT",
-  "browser": {
-    "./dist/lib/fs.js": "./dist/polyfills/fs-browser.js",
-    "fs": false,
-    "path": false,
-    "main": "dist/browser.js"
-  }
+  "license": "MIT"
 }
