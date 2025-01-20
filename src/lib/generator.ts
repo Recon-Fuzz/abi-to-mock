@@ -1,8 +1,7 @@
 const isBrowser = typeof window !== 'undefined';
 
-// Only import Node.js modules in Node environment
-const path = !isBrowser ? require('path') : null;
-const fs = !isBrowser ? require('fs') : null;
+// Import browser or node versions
+import { fs, path } from '../polyfills/fs-browser';
 
 import * as Handlebars from 'handlebars';
 import mockTemplate from '../templates/mock';
