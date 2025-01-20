@@ -5,6 +5,7 @@ yarn.lock
 
 # Build & test outputs
 dist/
+out/
 coverage/
 test-output/
 .nyc_output/

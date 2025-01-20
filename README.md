@@ -6,7 +6,6 @@ Generate Solidity mock contracts automatically from Ethereum ABIs.
 
 - Generates fully functional Solidity mock contracts
 - Supports complex data types including structs and nested arrays
-- Handles both functions and events
 - Maintains function signatures and event definitions
 - Customizable contract names and output locations
 - Available as both CLI tool and JavaScript library
@@ -16,16 +15,6 @@ Generate Solidity mock contracts automatically from Ethereum ABIs.
 ```bash
 npm install abi-to-mock
 ```
-
-## Quick Start
-
-Generate a mock contract from an example ABI:
-
-```bash
-node src/cli.js tests/fixtures/StabilityPool.json --name StabilityPool
-```
-
-This will generate a mock implementation of the StabilityPool contract in the default `./out` directory.
 
 ## Usage
 

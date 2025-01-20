@@ -9,3 +9,4 @@ webpack.config.js
 jest.config.js
 coverage/
 test-output/
+out/
