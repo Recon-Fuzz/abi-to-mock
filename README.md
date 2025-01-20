@@ -11,6 +11,12 @@ Generate Solidity mock contracts automatically from Ethereum ABIs.
 - Customizable contract names and output locations
 - Available as both CLI tool and JavaScript library
 
+## Installation
+
+```bash
+npm install abi-to-mock
+```
+
 ## Quick Start
 
 Generate a mock contract from an example ABI:
@@ -21,18 +27,16 @@ node src/cli.js tests/fixtures/StabilityPool.json --name StabilityPool
 
 This will generate a mock implementation of the StabilityPool contract in the default `./out` directory.
 
-## Installation
-
-```bash
-npm install abi-to-mock
-```
-
 ## Usage
 
 ### Command Line Interface
 
 ```bash
 npx abi-to-mock <abi-file> [options]
+
+Options:
+  --out, -o   Output directory (default: "./out")
+  --name, -n  Contract name (default: "Contract")
 ```
 
 Options:
@@ -47,36 +51,46 @@ npx abi-to-mock ./MyContract.json --out ./mocks --name MyContract
 ### Programmatic Usage
 
 ```javascript
+// Node.js
 const AbiToMock = require('abi-to-mock');
+// or ES Modules
+import AbiToMock from 'abi-to-mock';
 
-// Generate mock from ABI file
+// From file
 AbiToMock('./MyContract.json', './mocks', 'MyContract');
 
-// Or use ABI object directly
-const abi = [/* your ABI array */];
+// From ABI object
+const abi = [
+  {
+    "inputs": [],
+    "name": "getValue",
+    "outputs": [{"type": "uint256"}],
+    "type": "function"
+  }
+];
 AbiToMock.generateMock(abi, './mocks', 'MyContract');
+
+// Browser usage
+import { generateMockString } from 'abi-to-mock';
+const mockCode = generateMockString(abi, 'MyContract');
 ```
 
 ## Generated Mock Features
 
-- Maintains original function signatures
-- Implements customizable return values
-- Tracks function calls and parameters
-- Supports event emission
-- Handles complex data structures
-- Memory-safe implementation
+- Complete function signatures matching the original contract
+- Setter functions for return values
+- Complex type support (structs, arrays, mappings)
 
 ## API Reference
 
-### AbiToMock(abiPath, outputDirectory, contractName)
+```js
+// Node.js API
+AbiToMock(abiPath: string, outputDir?: string, name?: string): MockContract
+AbiToMock.generateMock(abi: ABI[], outputDir: string, name: string): MockContract
 
-Parameters:
-- `abiPath` (string): Path to ABI JSON file
-- `outputDirectory` (string, optional): Output directory for generated mocks
-- `contractName` (string, optional): Name of the contract
-
-Returns:
-- Object containing mock contract interface
+// Browser API
+generateMockString(abi: ABI[], name: string): string
+```
 
 ## Contributing
 

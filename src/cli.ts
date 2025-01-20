@@ -1,9 +1,15 @@
-const yargs = require('yargs');
-const AbiToMock = require('./index');
-const path = require('path');
+#!/usr/bin/env node
+import yargs from 'yargs';
+import AbiToMock from './index';
+
+interface CliArgs {
+  abi: string;
+  out: string;
+  name: string;
+}
 
 yargs
-  .command(
+  .command<CliArgs>(
     '$0 <abi>',
     'Generate mocks from ABI',
     (yargs) => {
@@ -26,9 +32,17 @@ yargs
         });
     },
     (argv) => {
-      const { abi, out, name } = argv;
-      AbiToMock(abi, out, name);
+      try {
+        AbiToMock(argv.abi, argv.out, argv.name);
+      } catch (error) {
+        console.error('\x1b[31m%s\x1b[0m', error instanceof Error ? error.message : 'An unknown error occurred');
+        process.exit(1);
+      }
     }
   )
+  .fail((msg, err) => {
+    console.error('\x1b[31m%s\x1b[0m', msg || (err instanceof Error ? err.message : 'An unknown error occurred'));
+    process.exit(1);
+  })
   .help()
   .argv;

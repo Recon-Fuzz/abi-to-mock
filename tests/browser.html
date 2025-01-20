@@ -1,0 +1,32 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ABI-to-Mock Browser Test</title>
+</head>
+<body>
+    <h1>ABI-to-Mock Browser Test</h1>
+    <pre id="output"></pre>
+
+    <script src="../dist/bundle.js"></script>
+    <script>
+        const testAbi = [{
+            "inputs": [],
+            "name": "testFunction",
+            "outputs": [{"type": "uint256", "name": "result"}],
+            "type": "function",
+            "stateMutability": "view"
+        }];
+
+        try {
+            // Test the browser version
+            const result = AbiToMock.generateMockString(testAbi, 'TestContract');
+            document.getElementById('output').textContent = result;
+            console.log('Test successful:', result.length > 0);
+        } catch (error) {
+            console.error('Test failed:', error);
+            document.getElementById('output').textContent = 'Error: ' + error.message;
+        }
+    </script>
+</body>
+</html>

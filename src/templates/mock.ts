@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: UNLICENSED
+const mockTemplate = `// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.0;
 
 contract {{contractName}} {
@@ -124,4 +124,6 @@ contract {{contractName}} {
 
     {{/if}}
     {{/each}}
-}
+}`;
+
+export default mockTemplate;

@@ -1,12 +1,10 @@
-// This file contains unit tests for the functions in generator.js. 
-// It ensures that the mock generation logic works as expected.
-
-const { generateMock } = require('../src/lib/generator');
-const fs = require('fs');
-const path = require('path');
+import * as path from 'path';
+import * as fs from 'fs';
+import { generateMock } from '../src/lib/generator';
+import { describe, expect, afterEach } from '@jest/globals';
 
 describe('Mock Generation', () => {
-    let outputDirectory;
+    let outputDirectory: string;
 
     beforeEach(() => {
         // Use relative path from CWD
@@ -25,17 +23,10 @@ describe('Mock Generation', () => {
         }
     });
 
-    test('should generate mock for valid ABI', () => {
-        const abi = {/* mock ABI object */ };
-        const mock = generateMock(abi, outputDirectory);
-        expect(mock).toBeDefined();
-        // Add more assertions based on expected mock structure
-    });
-
     test('should handle empty ABI', () => {
-        const abi = {};
+        const abi = { abi: [] };
         const mock = generateMock(abi, outputDirectory);
-        expect(mock).toEqual({});
+        expect(mock).toEqual({ functions: {}, events: {} });
     });
 
     test('should generate mock for ABI with functions', () => {

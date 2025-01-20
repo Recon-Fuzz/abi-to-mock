@@ -1,0 +1,11 @@
+
+src/
+tests/
+.git*
+*.test.*
+tsconfig.json
+webpack.config.js
+.eslintrc
+jest.config.js
+coverage/
+test-output/
