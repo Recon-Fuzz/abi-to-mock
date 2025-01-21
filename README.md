@@ -37,6 +37,13 @@ Example:
 npx abi-to-mock ./MyContract.json --out ./mocks --name MyContract
 ```
 
+## Using with foundry
+```bash
+forge build
+
+npx abi-to-mock out/ERC20Mock.sol/ERC20Mock.json --name Erc20Mock --out src/
+```
+
 ### Programmatic Usage
 
 ```javascript
