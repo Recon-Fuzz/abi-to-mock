@@ -1,6 +1,6 @@
 {
   "name": "abi-to-mock",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Generate Solidity mock contracts from Ethereum ABIs",
   "main": "dist/index.js",
   "browser": "dist/browser.js",
@@ -45,12 +45,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/0kn0t/abi-to-mock.git"
+    "url": "git+https://github.com/Recon-Fuzz/abi-to-mock.git"
   },
   "bugs": {
-    "url": "https://github.com/0kn0t/abi-to-mock/issues"
+    "url": "https://github.com/Recon-Fuzz/abi-to-mock/issues"
   },
-  "homepage": "https://github.com/0kn0t/abi-to-mock#readme",
+  "homepage": "https://github.com/Recon-Fuzz/abi-to-mock#readme",
   "keywords": [
     "solidity",
     "mock",

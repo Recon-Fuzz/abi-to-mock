@@ -25,7 +25,7 @@ import {
 function processType(param: AbiInput): string {
   const type = param.type;
   if (type.startsWith('tuple')) {
-    return param.internalType?.replace('struct ', '') || type;
+    return param.internalType?.replace('struct ', '').replace(".","_") || type;
   }
   return type;
 }
@@ -65,7 +65,7 @@ function processStructs(abi: any[]): Struct[] {
   function processComponents(components: AbiInput[], functionName: string, paramName: string): void {
     components.forEach(component => {
       if (isStructType(component.type, component.internalType)) {
-        const structName = component.internalType?.replace('struct ', '').replace(/\[\d*\]/g, '') || 
+        const structName = component.internalType?.replace('struct ', '').replace(/\[\d*\]/g, '').replace(".","_") || 
                            getStructName(functionName, component.name || paramName);
         
         if (!structs.has(structName) && component.components) {
@@ -86,7 +86,7 @@ function processStructs(abi: any[]): Struct[] {
 
     params.forEach(param => {
       if (isStructType(param.type, param.internalType)) {
-        const structName = param.internalType?.replace('struct ', '').replace(/\[\d*\]/g, '') || 
+        const structName = param.internalType?.replace('struct ', '').replace(/\[\d*\]/g, '').replace(".","_") || 
                            getStructName(item.name, param.name || 'Return');
         
         if (!structs.has(structName) && param.components) {
