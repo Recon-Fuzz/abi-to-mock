@@ -1,4 +1,3 @@
-
 export interface AbiInput {
   name?: string;
   type: string;
@@ -15,6 +14,7 @@ export interface AbiFunction {
   outputs: AbiOutput[];
   stateMutability?: string;
   type: string;
+  overloadIndex?: number;
 }
 
 export interface AbiEvent {

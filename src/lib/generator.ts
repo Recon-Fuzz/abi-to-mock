@@ -35,20 +35,43 @@ function getStructName(functionName: string, paramName: string): string {
 }
 
 function processABI(abi: any[]): { functions: AbiFunction[], events: AbiEvent[] } {
-  // Convert standard ABI format to our internal format
-  const functions = abi.filter(item => item.type === 'function').map(func => ({
-    name: func.name,
-    inputs: func.inputs || [],
-    outputs: func.outputs || [],
-    stateMutability: func.stateMutability,
-    type: 'function' // Add the missing type property
-  }));
+  // First pass: Count occurrences of each function name to detect overloads
+  const functionNameCount: Record<string, number> = {};
+  
+  abi.filter(item => item.type === 'function').forEach(func => {
+    const name = func.name;
+    functionNameCount[name] = (functionNameCount[name] || 0) + 1;
+  });
+  
+  // Second pass: Only assign overloadIndex to functions that have name conflicts
+  const processedFunctions: Record<string, number> = {};
+  
+  const functions = abi.filter(item => item.type === 'function').map(func => {
+    const name = func.name;
+    const hasOverloads = functionNameCount[name] > 1;
+    let overloadIndex: number | undefined = undefined;
+    
+    if (hasOverloads) {
+      // Only assign index if this function name has overloads
+      processedFunctions[name] = (processedFunctions[name] || 0);
+      overloadIndex = processedFunctions[name]++;
+    }
+    
+    return {
+      name: func.name,
+      inputs: func.inputs || [],
+      outputs: func.outputs || [],
+      stateMutability: func.stateMutability,
+      type: 'function',
+      overloadIndex // Will be undefined for non-overloaded functions
+    };
+  });
 
   const events = abi.filter(item => item.type === 'event').map(event => ({
     name: event.name,
     inputs: event.inputs || [],
     anonymous: event.anonymous,
-    type: 'event' // Add the missing type property
+    type: 'event'
   }));
 
   return { functions, events };
