@@ -10,12 +10,23 @@ contract {{contractName}} {
     {{#each functions}}
     {{#unless outputs}}
     // Mock implementation of {{name}}
-    function {{name}}({{#each inputs}}{{processType this}}{{#if (isStruct (processType this))}} memory{{/if}} {{#if name}}{{name}}{{else}}arg{{@index}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}}) public {
+    function {{name}}({{#each inputs}}{{processType this}}{{#if (isStruct (processType this))}} memory{{/if}} {{#if name}}{{name}}{{else}}arg{{@index}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}}) public {{#if (eq stateMutability "payable")}}payable {{/if}}{
         
     }
 
     {{/unless}}
     {{/each}}
+
+    {{#if receive}}
+    // Mock implementation of receive function
+    receive() external {{#if (eq receive.stateMutability "payable")}}payable {{/if}}{}
+
+    {{/if}}
+    {{#if fallback}}
+    // Mock implementation of fallback function
+    fallback() external {{#if (eq fallback.stateMutability "payable")}}payable {{/if}}{}
+
+    {{/if}}
 
     //<>=============================================================<>
     //||                                                             ||

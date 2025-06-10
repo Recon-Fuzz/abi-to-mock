@@ -6,7 +6,7 @@ export interface AbiInput {
   functionName?: string;
 }
 
-export interface AbiOutput extends AbiInput {}
+export interface AbiOutput extends AbiInput { }
 
 export interface AbiFunction {
   name: string;
@@ -37,9 +37,13 @@ export interface MockData {
   structs: Struct[];
   functions: AbiFunction[];
   events: AbiEvent[];
+  receive?: AbiFunction,
+  fallback?: AbiFunction;
 }
 
 export interface MockContract {
   functions: Record<string, () => void>;
   events: Record<string, () => void>;
+  receive?: AbiFunction,
+  fallback?: AbiFunction;
 }

@@ -34,7 +34,7 @@ function getStructName(functionName: string, paramName: string): string {
   return `${functionName}${paramName.charAt(0).toUpperCase() + paramName.slice(1)}Struct`;
 }
 
-function processABI(abi: any[]): { functions: AbiFunction[], events: AbiEvent[] } {
+function processABI(abi: any[]): { functions: AbiFunction[], events: AbiEvent[], receive?: AbiFunction, fallback?: AbiFunction } {
   // First pass: Count occurrences of each function name to detect overloads
   const functionNameCount: Record<string, number> = {};
   
@@ -67,6 +67,10 @@ function processABI(abi: any[]): { functions: AbiFunction[], events: AbiEvent[] 
     };
   });
 
+  const fallback = abi.find(item => item.type === 'fallback');
+
+  const receive = abi.find(item => item.type === 'receive');
+
   const events = abi.filter(item => item.type === 'event').map(event => ({
     name: event.name,
     inputs: event.inputs || [],
@@ -74,7 +78,7 @@ function processABI(abi: any[]): { functions: AbiFunction[], events: AbiEvent[] 
     type: 'event'
   }));
 
-  return { functions, events };
+  return { functions, events, receive, fallback };
 }
 
 function isStructType(type: string, internalType?: string): boolean {
@@ -206,6 +210,11 @@ Handlebars.registerHelper('hasMultipleOutputs', function(outputs: AbiInput[]) {
   return outputs && outputs.length > 1;
 });
 
+// Add helper to check equality
+Handlebars.registerHelper('eq', function(a, b) {
+  return a === b;
+});
+
 export function generateMockString(
   abiInput: any[] | { abi: any[] },
   contractName: string = 'Contract'
@@ -217,12 +226,14 @@ export function generateMockString(
       return '';
     }
 
-    const { functions, events } = processABI(abi);
+    const { functions, events, receive, fallback } = processABI(abi);
     const mockData: MockData = {
       contractName,
       structs: processStructs(abi),
       functions,
-      events
+      events,
+      receive,
+      fallback
     };
 
     const template = Handlebars.compile(mockTemplate);
@@ -259,7 +270,7 @@ export function generateMock(
 
   // Return mock interface
   const abi = Array.isArray(abiInput) ? abiInput : abiInput?.abi;
-  const { functions, events } = processABI(abi || []);
+  const { functions, events, receive, fallback } = processABI(abi || []);
   
   return {
     functions: functions.reduce<Record<string, () => void>>((acc, func) => {
@@ -269,6 +280,8 @@ export function generateMock(
     events: events.reduce<Record<string, () => void>>((acc, event) => {
       acc[event.name] = () => {};
       return acc;
-    }, {})
+    }, {}),
+    receive, 
+    fallback
   };
 }
