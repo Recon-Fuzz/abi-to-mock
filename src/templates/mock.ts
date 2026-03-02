@@ -119,13 +119,13 @@ contract {{contractName}} {
 
     //<>=============================================================<>
     //||                                                             ||
-    //||          ⚠️  VIEW FUNCTIONS - DO NOT MODIFY  ⚠️            ||
+    //||        ⚠️  RETURN FUNCTIONS - DO NOT MODIFY  ⚠️            ||
     //||                                                             ||
     //<>=============================================================<>
     {{#each functions}}
     {{#if outputs}}
     // Mock implementation of {{name}}{{#if overloadIndex}} (overload {{overloadIndex}}){{/if}}
-    function {{name}}({{#each inputs}}{{processType this}}{{#if (isStruct (processType this))}} memory{{/if}} {{#if name}}{{name}}{{else}}arg{{@index}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}}) public view returns ({{#each outputs}}{{processType this}}{{#if (isStruct (processType this))}} memory{{/if}}{{#unless @last}}, {{/unless}}{{/each}}) {
+    function {{name}}({{#each inputs}}{{processType this}}{{#if (isStruct (processType this))}} memory{{/if}} {{#if name}}{{name}}{{else}}arg{{@index}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}}) public {{mutability stateMutability}}returns ({{#each outputs}}{{processType this}}{{#if (isStruct (processType this))}} memory{{/if}}{{#unless @last}}, {{/unless}}{{/each}}) {
         {{#if (hasMultipleOutputs outputs)}}
         return ({{#each outputs}}_{{../name}}Return_{{@index}}{{#if ../overloadIndex}}_{{../overloadIndex}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}});
         {{else}}

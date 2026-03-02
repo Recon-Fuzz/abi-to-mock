@@ -215,6 +215,14 @@ Handlebars.registerHelper('eq', function(a, b) {
   return a === b;
 });
 
+// Add helper to emit the correct Solidity mutability keyword for mock functions.
+// view/pure originals → "view " (mock reads storage), payable → "payable ", nonpayable → ""
+Handlebars.registerHelper('mutability', function(stateMutability: string) {
+  if (stateMutability === 'view' || stateMutability === 'pure') return 'view ';
+  if (stateMutability === 'payable') return 'payable ';
+  return '';
+});
+
 export function generateMockString(
   abiInput: any[] | { abi: any[] },
   contractName: string = 'Contract'
